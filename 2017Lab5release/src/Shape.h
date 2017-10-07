@@ -17,7 +17,7 @@ public:
 	void init();
 	void resize();
 	void draw(const std::shared_ptr<Program> prog) const;
-	
+
 private:
 	std::vector<unsigned int> eleBuf;
 	std::vector<float> posBuf;
@@ -27,7 +27,7 @@ private:
 	unsigned posBufID;
 	unsigned norBufID;
 	unsigned texBufID;
-   unsigned vaoID;
+	unsigned vaoID;
 };
 
 #endif
