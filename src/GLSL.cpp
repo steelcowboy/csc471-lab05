@@ -118,7 +118,7 @@ void checkVersion()
 	if (major < 2)
 	{
 		printf("This shader example will not work due to the installed Opengl version, which is %d.%d.\n", major, minor);
-		exit(0);
+		exit(1);
 	}
 }
 
