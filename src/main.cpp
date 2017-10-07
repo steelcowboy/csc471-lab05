@@ -230,7 +230,7 @@ public:
 
 		// Use the local matrices for lab 5
 		float aspect = width/(float)height;
-		Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1, 100.0f);
+		Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1f, 100.0f);
 		Matrix::createIdentityMat(MV);
 
 		// Draw mesh using GLSL

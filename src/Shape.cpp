@@ -9,18 +9,6 @@
 
 using namespace std;
 
-Shape::Shape() :
-	eleBufID(0),
-	posBufID(0),
-	norBufID(0),
-	texBufID(0),
-	vaoID(0)
-{
-}
-
-Shape::~Shape()
-{
-}
 
 void Shape::loadMesh(const string &meshName)
 {
@@ -45,12 +33,13 @@ void Shape::loadMesh(const string &meshName)
 	}
 }
 
-void Shape::resize() {
+void Shape::resize()
+{
 	float minX, minY, minZ;
 	float maxX, maxY, maxZ;
 	float scaleX, scaleY, scaleZ;
 	float shiftX, shiftY, shiftZ;
-	float epsilon = 0.001;
+	float epsilon = 0.001f;
 
 	minX = minY = minZ = 1.1754E+38F;
 	maxX = maxY = maxZ = -1.1754E+38F;
@@ -85,24 +74,25 @@ void Shape::resize() {
 	{
 		maxExtent = zExtent;
 	}
-	scaleX = 2.0 /maxExtent;
-	shiftX = minX + (xExtent/ 2.0);
-	scaleY = 2.0 / maxExtent;
-	shiftY = minY + (yExtent / 2.0);
-	scaleZ = 2.0/ maxExtent;
-	shiftZ = minZ + (zExtent)/2.0;
+	scaleX = 2.0f / maxExtent;
+	shiftX = minX + (xExtent / 2.0f);
+	scaleY = 2.0f / maxExtent;
+	shiftY = minY + (yExtent / 2.0f);
+	scaleZ = 2.0f / maxExtent;
+	shiftZ = minZ + (zExtent / 2.0f);
 
 	// Go through all verticies shift and scale them
-	for (size_t v = 0; v < posBuf.size() / 3; v++) {
+	for (size_t v = 0; v < posBuf.size() / 3; v++)
+	{
 		posBuf[3*v+0] = (posBuf[3*v+0] - shiftX) * scaleX;
-		assert(posBuf[3*v+0] >= -1.0 - epsilon);
-		assert(posBuf[3*v+0] <= 1.0 + epsilon);
+		assert(posBuf[3*v+0] >= -1.0f - epsilon);
+		assert(posBuf[3*v+0] <= 1.0f + epsilon);
 		posBuf[3*v+1] = (posBuf[3*v+1] - shiftY) * scaleY;
-		assert(posBuf[3*v+1] >= -1.0 - epsilon);
-		assert(posBuf[3*v+1] <= 1.0 + epsilon);
+		assert(posBuf[3*v+1] >= -1.0f - epsilon);
+		assert(posBuf[3*v+1] <= 1.0f + epsilon);
 		posBuf[3*v+2] = (posBuf[3*v+2] - shiftZ) * scaleZ;
-		assert(posBuf[3*v+2] >= -1.0 - epsilon);
-		assert(posBuf[3*v+2] <= 1.0 + epsilon);
+		assert(posBuf[3*v+2] >= -1.0f - epsilon);
+		assert(posBuf[3*v+2] <= 1.0f + epsilon);
 	}
 }
 
@@ -127,9 +117,12 @@ void Shape::init()
 	}
 
 	// Send the texture array to the GPU
-	if(texBuf.empty()) {
+	if(texBuf.empty())
+	{
 		texBufID = 0;
-	} else {
+	}
+	else
+	{
 		glGenBuffers(1, &texBufID);
 		glBindBuffer(GL_ARRAY_BUFFER, texBufID);
 		glBufferData(GL_ARRAY_BUFFER, texBuf.size()*sizeof(float), &texBuf[0], GL_STATIC_DRAW);
@@ -161,7 +154,8 @@ void Shape::draw(const shared_ptr<Program> prog) const
 
 	// Bind normal buffer
 	h_nor = prog->getAttribute("vertNor");
-	if(h_nor != -1 && norBufID != 0) {
+	if(h_nor != -1 && norBufID != 0)
+	{
 		GLSL::enableVertexAttribArray(h_nor);
 		glBindBuffer(GL_ARRAY_BUFFER, norBufID);
 		glVertexAttribPointer(h_nor, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
@@ -170,7 +164,8 @@ void Shape::draw(const shared_ptr<Program> prog) const
 	if (texBufID != 0) {
 		// Bind texcoords buffer
 		h_tex = prog->getAttribute("vertTex");
-		if(h_tex != -1 && texBufID != 0) {
+		if(h_tex != -1 && texBufID != 0)
+		{
 			GLSL::enableVertexAttribArray(h_tex);
 			glBindBuffer(GL_ARRAY_BUFFER, texBufID);
 			glVertexAttribPointer(h_tex, 2, GL_FLOAT, GL_FALSE, 0, (const void *)0);
@@ -184,10 +179,12 @@ void Shape::draw(const shared_ptr<Program> prog) const
 	glDrawElements(GL_TRIANGLES, (int)eleBuf.size(), GL_UNSIGNED_INT, (const void *)0);
 
 	// Disable and unbind
-	if(h_tex != -1) {
+	if(h_tex != -1)
+	{
 		GLSL::disableVertexAttribArray(h_tex);
 	}
-	if(h_nor != -1) {
+	if(h_nor != -1)
+	{
 		GLSL::disableVertexAttribArray(h_nor);
 	}
 	GLSL::disableVertexAttribArray(h_pos);
