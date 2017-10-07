@@ -24,7 +24,7 @@ void Shape::loadMesh(const string &meshName)
 	{
 		cerr << errStr << endl;
 	}
-	else
+	else if (shapes.size())
 	{
 		posBuf = shapes[0].mesh.positions;
 		norBuf = shapes[0].mesh.normals;
