@@ -199,6 +199,11 @@ public:
 		prog = make_shared<Program>();
 		prog->setVerbose(true);
 		prog->setShaderNames(resourceDirectory + "/simple_vert.glsl", resourceDirectory + "/simple_frag.glsl");
+		if (! prog->init())
+		{
+			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+			exit(1);
+		}
 		prog->init();
 		prog->addUniform("P");
 		prog->addUniform("MV");
