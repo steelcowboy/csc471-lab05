@@ -105,7 +105,7 @@ void Shape::init()
 	// Send the position array to the GPU
 	glGenBuffers(1, &posBufID);
 	glBindBuffer(GL_ARRAY_BUFFER, posBufID);
-	glBufferData(GL_ARRAY_BUFFER, posBuf.size()*sizeof(float), &posBuf[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, posBuf.size()*sizeof(float), posBuf.data(), GL_STATIC_DRAW);
 
 	// Send the normal array to the GPU
 	if (norBuf.empty())
@@ -116,7 +116,7 @@ void Shape::init()
 	{
 		glGenBuffers(1, &norBufID);
 		glBindBuffer(GL_ARRAY_BUFFER, norBufID);
-		glBufferData(GL_ARRAY_BUFFER, norBuf.size()*sizeof(float), &norBuf[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, norBuf.size()*sizeof(float), norBuf.data(), GL_STATIC_DRAW);
 	}
 
 	// Send the texture array to the GPU
@@ -128,13 +128,13 @@ void Shape::init()
 	{
 		glGenBuffers(1, &texBufID);
 		glBindBuffer(GL_ARRAY_BUFFER, texBufID);
-		glBufferData(GL_ARRAY_BUFFER, texBuf.size()*sizeof(float), &texBuf[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, texBuf.size()*sizeof(float), texBuf.data(), GL_STATIC_DRAW);
 	}
 
 	// Send the element array to the GPU
 	glGenBuffers(1, &eleBufID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eleBufID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, eleBuf.size()*sizeof(unsigned int), &eleBuf[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, eleBuf.size()*sizeof(unsigned int), eleBuf.data(), GL_STATIC_DRAW);
 
 	// Unbind the arrays
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
