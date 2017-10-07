@@ -1,6 +1,8 @@
+
 #pragma once
-#ifndef _SHAPE_H_
-#define _SHAPE_H_
+
+#ifndef LAB471_SHAPE_H_INCLUDED
+#define LAB471_SHAPE_H_INCLUDED
 
 #include <string>
 #include <vector>
@@ -33,4 +35,4 @@ private:
 
 };
 
-#endif
+#endif // LAB471_SHAPE_H_INCLUDED

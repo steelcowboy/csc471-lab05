@@ -16,7 +16,8 @@ namespace GLSL
 
 const char * errorString(GLenum err)
 {
-	switch (err) {
+	switch (err)
+	{
 	case GL_NO_ERROR:
 		return "No error";
 	case GL_INVALID_ENUM:

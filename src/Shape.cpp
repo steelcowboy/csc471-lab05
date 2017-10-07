@@ -20,7 +20,7 @@ void Shape::loadMesh(const string &meshName)
 	string errStr;
 	bool rc = tinyobj::LoadObj(shapes, objMaterials, errStr, meshName.c_str());
 
-	if(! rc)
+	if (! rc)
 	{
 		cerr << errStr << endl;
 	}
@@ -47,14 +47,14 @@ void Shape::resize()
 	// Go through all vertices to determine min and max of each dimension
 	for (size_t v = 0; v < posBuf.size() / 3; v++)
 	{
-		if(posBuf[3*v+0] < minX) minX = posBuf[3*v+0];
-		if(posBuf[3*v+0] > maxX) maxX = posBuf[3*v+0];
+		if (posBuf[3*v+0] < minX) minX = posBuf[3*v+0];
+		if (posBuf[3*v+0] > maxX) maxX = posBuf[3*v+0];
 
-		if(posBuf[3*v+1] < minY) minY = posBuf[3*v+1];
-		if(posBuf[3*v+1] > maxY) maxY = posBuf[3*v+1];
+		if (posBuf[3*v+1] < minY) minY = posBuf[3*v+1];
+		if (posBuf[3*v+1] > maxY) maxY = posBuf[3*v+1];
 
-		if(posBuf[3*v+2] < minZ) minZ = posBuf[3*v+2];
-		if(posBuf[3*v+2] > maxZ) maxZ = posBuf[3*v+2];
+		if (posBuf[3*v+2] < minZ) minZ = posBuf[3*v+2];
+		if (posBuf[3*v+2] > maxZ) maxZ = posBuf[3*v+2];
 	}
 
 	// From min and max compute necessary scale and shift for each dimension
@@ -108,16 +108,19 @@ void Shape::init()
 	glBufferData(GL_ARRAY_BUFFER, posBuf.size()*sizeof(float), &posBuf[0], GL_STATIC_DRAW);
 
 	// Send the normal array to the GPU
-	if(norBuf.empty()) {
+	if (norBuf.empty())
+	{
 		norBufID = 0;
-	} else {
+	}
+	else
+	{
 		glGenBuffers(1, &norBufID);
 		glBindBuffer(GL_ARRAY_BUFFER, norBufID);
 		glBufferData(GL_ARRAY_BUFFER, norBuf.size()*sizeof(float), &norBuf[0], GL_STATIC_DRAW);
 	}
 
 	// Send the texture array to the GPU
-	if(texBuf.empty())
+	if (texBuf.empty())
 	{
 		texBufID = 0;
 	}
@@ -154,17 +157,18 @@ void Shape::draw(const shared_ptr<Program> prog) const
 
 	// Bind normal buffer
 	h_nor = prog->getAttribute("vertNor");
-	if(h_nor != -1 && norBufID != 0)
+	if (h_nor != -1 && norBufID != 0)
 	{
 		GLSL::enableVertexAttribArray(h_nor);
 		glBindBuffer(GL_ARRAY_BUFFER, norBufID);
 		glVertexAttribPointer(h_nor, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
 	}
 
-	if (texBufID != 0) {
+	if (texBufID != 0)
+	{
 		// Bind texcoords buffer
 		h_tex = prog->getAttribute("vertTex");
-		if(h_tex != -1 && texBufID != 0)
+		if (h_tex != -1 && texBufID != 0)
 		{
 			GLSL::enableVertexAttribArray(h_tex);
 			glBindBuffer(GL_ARRAY_BUFFER, texBufID);
@@ -179,11 +183,11 @@ void Shape::draw(const shared_ptr<Program> prog) const
 	glDrawElements(GL_TRIANGLES, (int)eleBuf.size(), GL_UNSIGNED_INT, (const void *)0);
 
 	// Disable and unbind
-	if(h_tex != -1)
+	if (h_tex != -1)
 	{
 		GLSL::disableVertexAttribArray(h_tex);
 	}
-	if(h_nor != -1)
+	if (h_nor != -1)
 	{
 		GLSL::disableVertexAttribArray(h_nor);
 	}

@@ -16,7 +16,8 @@
 using namespace std;
 using namespace glm;
 
-class Matrix {
+class Matrix
+{
 
 public:
 
@@ -29,21 +30,21 @@ public:
 		// [ 3  7 11 15]
 		// The (i, j)th element is A[i+4*j].
 
-		if(name)
+		if (name)
 		{
 			printf("%s=[\n", name);
 		}
 
-		for(int i = 0; i < 4; ++i)
+		for (int i = 0; i < 4; ++i)
 		{
-			for(int j = 0; j < 4; ++j)
+			for (int j = 0; j < 4; ++j)
 			{
 				printf("%- 5.2f ", A[i + 4*j]);
 			}
 			printf("\n");
 		}
 
-		if(name)
+		if (name)
 		{
 			printf("];");
 		}
@@ -53,9 +54,9 @@ public:
 	static void createIdentityMat(float *M)
 	{
 		// set all values to zero
-		for(int i = 0; i < 4; ++i)
+		for (int i = 0; i < 4; ++i)
 		{
-			for(int j = 0; j < 4; ++j)
+			for (int j = 0; j < 4; ++j)
 			{
 				M[i + 4*j] = 0;
 			}
@@ -94,10 +95,10 @@ public:
 	{
 		float c = 0;
 
-		for(int k = 0; k < 4; ++k)
+		for (int k = 0; k < 4; ++k)
 		{
 			// Process kth column of C
-			for(int i = 0; i < 4; ++i)
+			for (int i = 0; i < 4; ++i)
 			{
 				// Process ith row of C.
 				// The (i,k)th element of C is the dot product
@@ -105,7 +106,7 @@ public:
 				c = 0;
 
 				// vector dot product
-				for(int j = 0; j < 4; ++j)
+				for (int j = 0; j < 4; ++j)
 				{
 					// IMPLEMENT ME
 				}
@@ -269,7 +270,7 @@ int main(int argc, char **argv)
 	application->initGeom(resourceDir);
 
 	// Loop until the user closes the window.
-	while(! glfwWindowShouldClose(windowManager->getHandle()))
+	while (! glfwWindowShouldClose(windowManager->getHandle()))
 	{
 		// Render scene.
 		application->render();
