@@ -15,7 +15,9 @@
     <ClInclude Include="GLSL.h" />
     <ClInclude Include="WindowManager.h" />
     <ClInclude Include="Shape.h" />
-    <ClInclude Include="tiny_obj_loader.h" />
+    <ClInclude Include="tiny_obj_loader.h">
+      <Filter>ext</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ext">
