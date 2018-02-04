@@ -68,7 +68,16 @@ public:
 
 	static void createTranslateMat(float *T, float x, float y, float z)
 	{
-		// IMPLEMENT ME
+        // set all values to 0, but it's array so let's not waste time
+        for (size_t i=0; i < 16; i++) {
+            T[i] = 0;
+        }
+
+        T[3] = x;
+        T[7] = y;
+        T[11] = z;
+        
+        T[0] = T[5] = T[10] = T[15] = 1;
 	}
 
 	static void createScaleMat(float *S, float x, float y, float z)
@@ -225,6 +234,7 @@ public:
 		// Local modelview matrix use this for lab 5
 		float MV[16] = {0};
 		float P[16] = {0};
+        //float N[16] = {0};
 
 		// Get current frame buffer size.
 		int width, height;
@@ -237,7 +247,8 @@ public:
 		// Use the local matrices for lab 5
 		float aspect = width/(float)height;
 		Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1f, 100.0f);
-		Matrix::createIdentityMat(MV);
+		//Matrix::createIdentityMat(MV);
+        Matrix::createTranslateMat(MV, 0, 0, -3);
 
 		// Draw mesh using GLSL
 		prog->bind();
