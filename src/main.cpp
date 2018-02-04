@@ -248,7 +248,7 @@ class Application : public EventCallbacks
             float aspect = width/(float)height;
             Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1f, 100.0f);
             //Matrix::createIdentityMat(MV);
-            Matrix::createTranslateMat(MV, 0, 0, -3);
+            Matrix::createTranslateMat(MV, 0, 0, -20);
 
             // Draw mesh using GLSL
             prog->bind();
