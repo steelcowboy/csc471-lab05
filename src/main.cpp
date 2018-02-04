@@ -73,9 +73,9 @@ class Matrix
                 T[i] = 0;
             }
 
-            T[3] = x;
-            T[7] = y;
-            T[11] = z;
+            T[0 + 4*3] = x;
+            T[1 + 4*3] = y;
+            T[2 + 4*3] = z;
 
             T[0] = T[5] = T[10] = T[15] = 1;
         }
@@ -86,10 +86,10 @@ class Matrix
                 S[i] = 0;
             }
 
-            S[0] = x;
-            S[5] = y;
-            S[10] = z;
-            S[15] = 1;
+            S[0 + 4*0] = x;
+            S[1 + 4*1] = y;
+            S[2 + 4*2] = z;
+            S[3 + 4*3] = 1;
         }
 
         static void createRotateMatX(float *R, float radians)
@@ -99,10 +99,10 @@ class Matrix
             }
 
             R[0] = 1;
-            R[5] = cos(radians);
-            R[6] = -sin(radians);
-            R[9] = sin(radians);
-            R[10] = cos(radians);
+            R[1 + 4*1] = cos(radians);
+            R[1 + 4*2] = -sin(radians);
+            R[2 + 4*1] = sin(radians);
+            R[2 + 4*2] = cos(radians);
 
             R[15] = 1;
         }
@@ -113,11 +113,11 @@ class Matrix
                 R[i] = 0;
             }
 
-            R[0] = cos(radians);
-            R[2] = sin(radians);
-            R[5] = 1;
-            R[8] = -sin(radians);
-            R[9] = cos(radians);
+            R[0 + 4*0] = cos(radians);
+            R[0 + 4*2] = sin(radians);
+            R[1 + 4*1] = 1;
+            R[2 + 4*0] = -sin(radians);
+            R[2 + 4*2] = cos(radians);
 
             R[15] = 1;
         }
@@ -128,11 +128,11 @@ class Matrix
                 R[i] = 0;
             }
 
-            R[0] = cos(radians);
-            R[1] = -sin(radians);
-            R[4] = sin(radians);
-            R[5] = cos(radians);
-            R[10] = 1;
+            R[0 + 4*0] = cos(radians);
+            R[0 + 4*1] = -sin(radians);
+            R[1 + 4*0] = sin(radians);
+            R[1 + 4*2] = cos(radians);
+            R[2 + 4*2] = 1;
 
             R[15] = 1;
         }
@@ -272,7 +272,11 @@ class Application : public EventCallbacks
             // Local modelview matrix use this for lab 5
             float MV[16] = {0};
             float P[16] = {0};
-            //float N[16] = {0};
+            float N[16] = {0};
+            float M[16] = {0};
+            float O[16] = {0};
+            float Q[16] = {0};
+            
 
             // Get current frame buffer size.
             int width, height;
@@ -286,7 +290,13 @@ class Application : public EventCallbacks
             float aspect = width/(float)height;
             Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1f, 100.0f);
             //Matrix::createIdentityMat(MV);
-            Matrix::createTranslateMat(MV, 0, 0, -20);
+            Matrix::createTranslateMat(N, 0, 0, -10);
+            //Matrix::printMat(N, "N");
+            Matrix::createRotateMatX(M, 0.5);
+            Matrix::createRotateMatY(O, 0.7);
+            Matrix::multMat(Q, N, M);
+            Matrix::multMat(MV, Q, O);
+            //Matrix::printMat(MV, "MV");
 
             // Draw mesh using GLSL
             prog->bind();
