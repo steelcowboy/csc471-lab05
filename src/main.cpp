@@ -82,32 +82,69 @@ class Matrix
 
         static void createScaleMat(float *S, float x, float y, float z)
         {
-            // IMPLEMENT ME
+            for (size_t i=0; i < 16; i++) {
+                S[i] = 0;
+            }
+
+            S[0] = x;
+            S[5] = y;
+            S[10] = z;
+            S[15] = 1;
         }
 
         static void createRotateMatX(float *R, float radians)
         {
-            // IMPLEMENT ME
+            for (size_t i=0; i < 16; i++) {
+                R[i] = 0;
+            }
+
+            R[0] = 1;
+            R[5] = cos(radians);
+            R[6] = -sin(radians);
+            R[9] = sin(radians);
+            R[10] = cos(radians);
+
+            R[15] = 1;
         }
 
         static void createRotateMatY(float *R, float radians)
         {
-            // IMPLEMENT ME
+            for (size_t i=0; i < 16; i++) {
+                R[i] = 0;
+            }
+
+            R[0] = cos(radians);
+            R[2] = sin(radians);
+            R[5] = 1;
+            R[8] = -sin(radians);
+            R[9] = cos(radians);
+
+            R[15] = 1;
         }
 
         static void createRotateMatZ(float *R, float radians)
         {
-            // IMPLEMENT ME
+            for (size_t i=0; i < 16; i++) {
+                R[i] = 0;
+            }
+
+            R[0] = cos(radians);
+            R[1] = -sin(radians);
+            R[4] = sin(radians);
+            R[5] = cos(radians);
+            R[10] = 1;
+
+            R[15] = 1;
         }
 
         static void multMat(float *C, const float *A, const float *B)
         {
             float c = 0;
 
-            for (int k = 0; k < 4; ++k)
+            for (size_t crow = 0; crow < 4; crow++)
             {
                 // Process kth column of C
-                for (int i = 0; i < 4; ++i)
+                for (int ccol = 0; ccol < 4; ++ccol)
                 {
                     // Process ith row of C.
                     // The (i,k)th element of C is the dot product
@@ -117,8 +154,9 @@ class Matrix
                     // vector dot product
                     for (int j = 0; j < 4; ++j)
                     {
-                        // IMPLEMENT ME
+                        c += A[crow + 4*j] * B[j + 4*ccol];
                     }
+                    C[crow + 4*ccol] = c;
                 }
             }
         }
