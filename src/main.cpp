@@ -131,7 +131,7 @@ class Matrix
             R[0 + 4*0] = cos(radians);
             R[0 + 4*1] = -sin(radians);
             R[1 + 4*0] = sin(radians);
-            R[1 + 4*2] = cos(radians);
+            R[1 + 4*1] = cos(radians);
             R[2 + 4*2] = 1;
 
             R[15] = 1;
@@ -200,7 +200,11 @@ class Application : public EventCallbacks
         std::shared_ptr<Program> prog;
 
         // Shape to be used (from obj file)
-        shared_ptr<Shape> shape;
+        shared_ptr<Shape> h_l;
+        shared_ptr<Shape> h_cross;
+        shared_ptr<Shape> h_r;
+        shared_ptr<Shape> i_cube;
+
 
         // Contains vertex information for OpenGL
         GLuint VertexArrayID;
@@ -261,21 +265,39 @@ class Application : public EventCallbacks
         void initGeom(const std::string& resourceDirectory)
         {
             // Initialize mesh.
-            shape = make_shared<Shape>();
-            shape->loadMesh(resourceDirectory + "/cube.obj");
-            shape->resize();
-            shape->init();
+            h_l = make_shared<Shape>();
+            h_l->loadMesh(resourceDirectory + "/cube.obj");
+            h_l->resize();
+            h_l->init();
+
+            h_r = make_shared<Shape>();
+            h_r->loadMesh(resourceDirectory + "/cube.obj");
+            h_r->resize();
+            h_r->init();
+
+            i_cube = make_shared<Shape>();
+            i_cube->loadMesh(resourceDirectory + "/cube.obj");
+            i_cube->resize();
+            i_cube->init();
+
+            h_cross = make_shared<Shape>();
+            h_cross->loadMesh(resourceDirectory + "/cube.obj");
+            h_cross->resize();
+            h_cross->init();
         }
 
         void render()
         {
+            static const float OUT_Z = -17.0;
+            static const float VERT_SCALE = 4.0;
+            
             // Local modelview matrix use this for lab 5
             float MV[16] = {0};
             float P[16] = {0};
             float N[16] = {0};
             float M[16] = {0};
             float O[16] = {0};
-            float Q[16] = {0};
+            float I[16] = {0};
             
 
             // Get current frame buffer size.
@@ -289,20 +311,48 @@ class Application : public EventCallbacks
             // Use the local matrices for lab 5
             float aspect = width/(float)height;
             Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1f, 100.0f);
-            //Matrix::createIdentityMat(MV);
-            Matrix::createTranslateMat(N, 0, 0, -10);
-            //Matrix::printMat(N, "N");
-            Matrix::createRotateMatX(M, 0.5);
-            Matrix::createRotateMatY(O, 0.7);
-            Matrix::multMat(Q, N, M);
-            Matrix::multMat(MV, Q, O);
-            //Matrix::printMat(MV, "MV");
-
+            //Matrix::createRotateMatY(O, 5.75);
+            //Matrix::createTranslateMat(M, -2, 0, 0);
+            //Matrix::multMat(N, M, O);
+            //Matrix::multMat(P, I, O);
+            
             // Draw mesh using GLSL
             prog->bind();
             glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+
+            // Left part of H
+            Matrix::createTranslateMat(N, -6, 0, OUT_Z);
+            Matrix::createScaleMat(M, 1, VERT_SCALE, 1);
+            Matrix::multMat(MV, M, N);
+
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
-            shape->draw(prog);
+            h_l->draw(prog);
+
+            // Right part of the H
+            Matrix::createTranslateMat(N, -2, 0, OUT_Z);
+            Matrix::createScaleMat(M, 1, VERT_SCALE, 1);
+            Matrix::multMat(MV, M, N);
+            glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
+            h_r->draw(prog);
+            
+            // Letter I 
+            Matrix::createTranslateMat(N, 2, 0, OUT_Z);
+            Matrix::createScaleMat(M, 1, VERT_SCALE, 1);
+            Matrix::multMat(MV, M, N);
+            glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
+            i_cube->draw(prog);
+
+            // Cross of H
+            Matrix::createTranslateMat(N, -4, 0, OUT_Z);
+            Matrix::createScaleMat(M, 0.5, 4, 1);
+            Matrix::createRotateMatZ(O, 1.0);
+
+            // Translate * Rotate * Scale
+            Matrix::multMat(I, N, O);
+            Matrix::multMat(MV, I, M);
+            glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
+            h_cross->draw(prog);
+
             prog->unbind();
         }
 };
