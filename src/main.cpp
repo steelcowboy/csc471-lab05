@@ -288,17 +288,22 @@ class Application : public EventCallbacks
 
         void render()
         {
-            static const float OUT_Z = -17.0;
+            static const float OUT_Z = -8.0;
             static const float VERT_SCALE = 4.0;
             
             // Local modelview matrix use this for lab 5
             float MV[16] = {0};
             float P[16] = {0};
-            float N[16] = {0};
-            float M[16] = {0};
-            float O[16] = {0};
+            float TRANS[16] = {0};
+            float SCALE[16] = {0};
+            float ROTAT[16] = {0};
             float I[16] = {0};
+            float TMP[16] = {0};
+            float GLOB_ROT[16] = {0};
+            float GLOB_TRANS[16] = {0};
             
+            Matrix::createRotateMatY(GLOB_ROT, 5.75);
+            Matrix::createTranslateMat(GLOB_TRANS, 0, 0, OUT_Z);
 
             // Get current frame buffer size.
             int width, height;
@@ -311,45 +316,49 @@ class Application : public EventCallbacks
             // Use the local matrices for lab 5
             float aspect = width/(float)height;
             Matrix::createPerspectiveMat(P, 70.0f, aspect, 0.1f, 100.0f);
-            //Matrix::createRotateMatY(O, 5.75);
-            //Matrix::createTranslateMat(M, -2, 0, 0);
-            //Matrix::multMat(N, M, O);
-            //Matrix::multMat(P, I, O);
             
             // Draw mesh using GLSL
             prog->bind();
             glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
 
             // Left part of H
-            Matrix::createTranslateMat(N, -6, 0, OUT_Z);
-            Matrix::createScaleMat(M, 1, VERT_SCALE, 1);
-            Matrix::multMat(MV, M, N);
+            Matrix::createTranslateMat(TRANS, -6, 0, OUT_Z);
+            Matrix::createScaleMat(SCALE, 1, VERT_SCALE, 1);
+            Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
+            Matrix::multMat(TMP, I, TRANS);
+            Matrix::multMat(MV, TMP, SCALE);
 
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
             h_l->draw(prog);
 
             // Right part of the H
-            Matrix::createTranslateMat(N, -2, 0, OUT_Z);
-            Matrix::createScaleMat(M, 1, VERT_SCALE, 1);
-            Matrix::multMat(MV, M, N);
+            Matrix::createTranslateMat(TRANS, -2, 0, OUT_Z);
+            Matrix::createScaleMat(SCALE, 1, VERT_SCALE, 1);
+            Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
+            Matrix::multMat(TMP, I, TRANS);
+            Matrix::multMat(MV, TMP, SCALE);
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
             h_r->draw(prog);
             
             // Letter I 
-            Matrix::createTranslateMat(N, 2, 0, OUT_Z);
-            Matrix::createScaleMat(M, 1, VERT_SCALE, 1);
-            Matrix::multMat(MV, M, N);
+            Matrix::createTranslateMat(TRANS, 2, 0, OUT_Z);
+            Matrix::createScaleMat(SCALE, 1, VERT_SCALE, 1);
+            Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
+            Matrix::multMat(TMP, I, TRANS);
+            Matrix::multMat(MV, TMP, SCALE);
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
             i_cube->draw(prog);
 
             // Cross of H
-            Matrix::createTranslateMat(N, -4, 0, OUT_Z);
-            Matrix::createScaleMat(M, 0.5, 4, 1);
-            Matrix::createRotateMatZ(O, 1.0);
+            Matrix::createTranslateMat(TRANS, -4, 0, OUT_Z);
+            Matrix::createScaleMat(SCALE, 0.5, 4, 1);
+            Matrix::createRotateMatZ(ROTAT, 1.0);
 
             // Translate * Rotate * Scale
-            Matrix::multMat(I, N, O);
-            Matrix::multMat(MV, I, M);
+            Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
+            Matrix::multMat(TMP, I, TRANS);
+            Matrix::multMat(I, TMP, ROTAT);
+            Matrix::multMat(MV, I, SCALE);
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
             h_cross->draw(prog);
 
