@@ -288,7 +288,7 @@ class Application : public EventCallbacks
 
         void render()
         {
-            static const float OUT_Z = -8.0;
+            static const float OUT_Z = -18.0;
             static const float VERT_SCALE = 4.0;
             
             // Local modelview matrix use this for lab 5
@@ -302,8 +302,8 @@ class Application : public EventCallbacks
             float GLOB_ROT[16] = {0};
             float GLOB_TRANS[16] = {0};
             
-            Matrix::createRotateMatY(GLOB_ROT, glfwGetTime());
-            //Matrix::createRotateMatY(GLOB_ROT, 5.75);
+            //Matrix::createRotateMatY(GLOB_ROT, glfwGetTime());
+            Matrix::createRotateMatY(GLOB_ROT, 5.75);
             Matrix::createTranslateMat(GLOB_TRANS, 0, 0, OUT_Z);
 
             // Get current frame buffer size.
@@ -323,7 +323,7 @@ class Application : public EventCallbacks
             glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
 
             // Left part of H
-            Matrix::createTranslateMat(TRANS, -6, 0, OUT_Z);
+            Matrix::createTranslateMat(TRANS, -6, 0, 0);
             Matrix::createScaleMat(SCALE, 1, VERT_SCALE, 1);
             Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
             Matrix::multMat(TMP, I, TRANS);
@@ -333,7 +333,7 @@ class Application : public EventCallbacks
             h_l->draw(prog);
 
             // Right part of the H
-            Matrix::createTranslateMat(TRANS, -2, 0, OUT_Z);
+            Matrix::createTranslateMat(TRANS, -2, 0, 0);
             Matrix::createScaleMat(SCALE, 1, VERT_SCALE, 1);
             Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
             Matrix::multMat(TMP, I, TRANS);
@@ -342,19 +342,16 @@ class Application : public EventCallbacks
             h_r->draw(prog);
             
             // Letter I 
-            Matrix::createTranslateMat(TRANS, 2, 0, OUT_Z);
+            Matrix::createTranslateMat(TRANS, 2, 0, 0);
             Matrix::createScaleMat(SCALE, 1, VERT_SCALE, 1);
-            //Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
-            //Matrix::multMat(TMP, I, TRANS);
-            //Matrix::multMat(MV, TMP, SCALE);
-            Matrix::multMat(I, GLOB_TRANS, TRANS);
-            Matrix::multMat(TMP, I, SCALE);
-            Matrix::multMat(MV, TMP, GLOB_ROT);
+            Matrix::multMat(I, GLOB_TRANS, GLOB_ROT);
+            Matrix::multMat(TMP, I, TRANS);
+            Matrix::multMat(MV, TMP, SCALE);
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
             i_cube->draw(prog);
 
             // Cross of H
-            Matrix::createTranslateMat(TRANS, -4, 0, OUT_Z);
+            Matrix::createTranslateMat(TRANS, -4, 0, 0);
             Matrix::createScaleMat(SCALE, 0.5, 4, 1);
             Matrix::createRotateMatZ(ROTAT, 1.0);
 
@@ -363,6 +360,10 @@ class Application : public EventCallbacks
             Matrix::multMat(TMP, I, TRANS);
             Matrix::multMat(I, TMP, ROTAT);
             Matrix::multMat(MV, I, SCALE);
+            //Matrix::multMat(I, GLOB_TRANS, TRANS);
+            //Matrix::multMat(TMP, I, ROTAT);
+            //Matrix::multMat(I, TMP, SCALE);
+            //Matrix::multMat(MV, I, GLOB_ROT);
             glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, MV);
             h_cross->draw(prog);
 
